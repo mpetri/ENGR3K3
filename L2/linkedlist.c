@@ -24,12 +24,12 @@ typedef struct {
 
 void rgb_print(void* d)
 {
-	assert(d != NULL);
-	rgb_t* rd = (rgb_t*)d;
+    assert(d != NULL);
+    rgb_t* rd = (rgb_t*)d;
     printf("(%.3d,%.3d,%.3d)\n", rd->r, rd->g, rd->b);
 }
 
-void list_process_all(node_t* p,void (*process)(void*))
+void list_process_all(node_t* p, void (*process)(void*))
 {
     while (p) {
         process(p->data);
@@ -39,8 +39,8 @@ void list_process_all(node_t* p,void (*process)(void*))
 
 void* list_pop_front(list_t* list)
 {
-	assert(list != NULL);
-	assert(list->num_elements > 0);
+    assert(list != NULL);
+    assert(list->num_elements > 0);
     node_t* old;
     assert(list->head != NULL);
     old = list->head;
@@ -57,7 +57,7 @@ void* list_pop_front(list_t* list)
 
 void list_push_front(list_t* list, void* d)
 {
-	assert(list != NULL);
+    assert(list != NULL);
     node_t* new = (node_t*)malloc(sizeof(node_t));
     assert(new);
     new->data = d;
@@ -70,7 +70,7 @@ void list_push_front(list_t* list, void* d)
 
 void list_push_back(list_t* list, void* d)
 {
-	assert(list != NULL);
+    assert(list != NULL);
     node_t* new = (node_t*)malloc(sizeof(node_t));
     assert(new != NULL);
     new->data = d;
@@ -97,9 +97,9 @@ void list_insert_after(list_t* list, node_t* n, void* d)
 */
 void* list_pop_back(list_t* list)
 {
-	assert(list != NULL);
-	assert(list->num_elements > 0);
-	return NULL;
+    assert(list != NULL);
+    assert(list->num_elements > 0);
+    return NULL;
 }
 
 list_t* list_new(void (*delfunc)(void*))
@@ -125,13 +125,13 @@ void list_free(list_t* list)
 
 int main(int argc, char const* argv[])
 {
-	/* create new list object with regular 'free' as the del function */
+    /* create new list object with regular 'free' as the del function */
     list_t* list = list_new(free);
 
     /* insert some elements at the front */
     assert(list->num_elements == 0);
     for (int i = 0; i < 5; i++) {
-        rgb_t* new_dat = (rgb_t*) malloc(sizeof(rgb_t));
+        rgb_t* new_dat = (rgb_t*)malloc(sizeof(rgb_t));
         new_dat->r = rand() % 255;
         new_dat->g = rand() % 255;
         new_dat->b = rand() % 255;
@@ -141,7 +141,7 @@ int main(int argc, char const* argv[])
 
     /* insert some elements at the back */
     for (int i = 0; i < 5; i++) {
-        rgb_t* new_dat = (rgb_t*) malloc(sizeof(rgb_t));
+        rgb_t* new_dat = (rgb_t*)malloc(sizeof(rgb_t));
         new_dat->r = rand() % 255;
         new_dat->g = rand() % 255;
         new_dat->b = rand() % 255;
@@ -150,7 +150,7 @@ int main(int argc, char const* argv[])
     assert(list->num_elements == 10);
 
     /* process all elements in list */
-    list_process_all(list->head,rgb_print);
+    list_process_all(list->head, rgb_print);
 
     /* remove everything */
     list_free(list);
