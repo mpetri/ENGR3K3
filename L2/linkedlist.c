@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <assert.h>
 
+/* data type */
 typedef struct {
     int r;
     int g;
     int b;
 } rgb_t;
 
+/* node type */
 typedef struct node node_t;
 
 struct node {
@@ -15,6 +17,7 @@ struct node {
     node_t* next;
 };
 
+/* linked list type */
 typedef struct {
     int num_elements;
     node_t* head;
@@ -22,6 +25,7 @@ typedef struct {
     void (*del)(void*);
 } list_t;
 
+/* print the RGB tuple */
 void rgb_print(void* d)
 {
     assert(d != NULL);
@@ -29,6 +33,7 @@ void rgb_print(void* d)
     printf("(%.3d,%.3d,%.3d)\n", rd->r, rd->g, rd->b);
 }
 
+/* process all elements in the list */
 void list_process_all(node_t* p, void (*process)(void*))
 {
     while (p) {
@@ -37,6 +42,7 @@ void list_process_all(node_t* p, void (*process)(void*))
     }
 }
 
+/* remove node at the front of the list */
 void* list_pop_front(list_t* list)
 {
     assert(list != NULL);
@@ -55,6 +61,7 @@ void* list_pop_front(list_t* list)
     return d;
 }
 
+/* add node add the front of the list */
 void list_push_front(list_t* list, void* d)
 {
     assert(list != NULL);
@@ -68,6 +75,7 @@ void list_push_front(list_t* list, void* d)
     list->num_elements++;
 }
 
+/* add node add the back of the list */
 void list_push_back(list_t* list, void* d)
 {
     assert(list != NULL);
@@ -102,6 +110,7 @@ void* list_pop_back(list_t* list)
     return NULL;
 }
 
+/* create a new linked list structure */
 list_t* list_new(void (*delfunc)(void*))
 {
     list_t* list;
@@ -114,8 +123,10 @@ list_t* list_new(void (*delfunc)(void*))
     return list;
 }
 
+/* free all memory associated with a list */
 void list_free(list_t* list)
 {
+    assert(list != NULL);
     while (list->num_elements) {
         void* elem = list_pop_front(list);
         list->del(elem);
