@@ -60,13 +60,16 @@ int bst_insert(bst_t* bst,void* d) {
 	new_node->data = d;
 	new_node->left = NULL;
 	new_node->right = NULL;
-	if(parent) {
+	if(parent != NULL) {
 		if(bst->cmp(parent->data,d) > 0) { // element is smaller
+			assert(parent->left == NULL);
 			parent->left = new_node;
 		} else {
+			assert(parent->right == NULL);
 			parent->right = new_node;
 		}
 	} else { 
+		assert(bst->root == NULL);
 		bst->root = new_node; 
 	}
 	bst->num_elements++;
@@ -210,15 +213,15 @@ void bst_traverse_preorder(node_t* n,void (*process)(void*)) {
 }
 void bst_traverse_inorder(node_t* n,void (*process)(void*)) {
 	if(n) {
-		bst_traverse_preorder(n->left,process);
+		bst_traverse_inorder(n->left,process);
 		process(n->data);
-		bst_traverse_preorder(n->right,process);
+		bst_traverse_inorder(n->right,process);
 	}
 }
 void bst_traverse_postorder(node_t* n,void (*process)(void*)) {
 	if(n) {
-		bst_traverse_preorder(n->left,process);
-		bst_traverse_preorder(n->right,process);
+		bst_traverse_postorder(n->left,process);
+		bst_traverse_postorder(n->right,process);
 		process(n->data);
 	}
 }
@@ -246,4 +249,16 @@ node_t* bst_max(bst_t* bst) {
 		tmp = tmp->right;
 	}
 	return tmp;
+}
+
+void bst_print(node_t* n,void (*print)(void*,void*)) {
+	if(n) {
+		if(n->left)
+			print(n->data,n->left->data);
+		if(n->right)
+			print(n->data,n->right->data);
+		
+		bst_print(n->left,print);
+		bst_print(n->right,print);
+	}
 }

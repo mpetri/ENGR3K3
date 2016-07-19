@@ -44,10 +44,19 @@ void city_print(void* c) {
 	printf("(%45s,%35s,%9d)\n",city->name,city->country,city->population);
 }
 
+void city_tree_print(void* parent,void* node) {
+	city_t* pcity = (city_t*) parent;
+	city_t* ncity = (city_t*) node;
+	if(parent)
+		printf("(%s;%d),(%s;%d)\n",ncity->name,ncity->population,pcity->name,pcity->population);
+	else
+		printf("(%s;%d),null\n",ncity->name,ncity->population);
+}
+
 int main(int argc, char const *argv[])
 {
 	/* create a new city bst */
-	bst_t* bst = bst_new(city_free,city_cmp);
+	bst_t* bst = bst_new(city_free,city_cmp_pol);
 
 	/* read data and insert into bst */
 	int read = 0;
@@ -70,14 +79,14 @@ int main(int argc, char const *argv[])
 	bst_traverse(bst,BST_INORDER,city_print);
 
 	/* find the largest */
-	node_t* largest_city_node = bst_max(bst);
-	if(largest_city_node) {
-		printf("largest city is:\n");
-		city_print(largest_city_node->data);
-	}
+	// node_t* largest_city_node = bst_max(bst);
+	// if(largest_city_node) {
+	// 	printf("largest city is:\n");
+	// 	city_print(largest_city_node->data);
+	// }
 
-
-	node_t* melb_city_node = bst_find()
+	// city_tree_print(NULL,bst->root->data);
+	// bst_print(bst->root,city_tree_print);
 
 	return 0;
 }

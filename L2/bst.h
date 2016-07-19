@@ -51,5 +51,6 @@ node_t* bst_max(bst_t* bst);
 void bst_traverse_preorder(node_t* n,void (*process)(void*));
 void bst_traverse_inorder(node_t* n,void (*process)(void*));
 void bst_traverse_postorder(node_t* n,void (*process)(void*));
+void bst_print(node_t* n,void (*print)(void*,void*));
 
 #endif
