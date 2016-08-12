@@ -7,37 +7,43 @@
 /*
 	MERGE SORT IMPLEMENTATION
  */
-void merge(void** array, int n,int mid, int cmp(const void*, const void*))
+void merge(void** array, int n, int mid, int cmp(const void*, const void*))
 {
-	// (0) need extra space for merging
-	void** tmp = malloc(n*sizeof(void*));
-	void** left = array;
-	void** right = array + mid;
-	int i = 0; int j = 0;
-	int left_size = mid; int right_size = n-mid;
-	// (1) perform the merge
-	for(int k=0;k<n;k++) {
-		if(j == right_size) tmp[k] = left[i++];
-		else if(i == left_size) tmp[k] = right[j++];
-		else if( cmp(left[i],right[j]) < 1 ) tmp[k] = left[i++];
-		else tmp[k] = right[j++];
-	}
-	// (2) copy the merged array
-	for(int i=0;i<n;i++) {
-		array[i] = tmp[i];
-	}
-	// (3) clean up 
-	free(tmp);
+    // (0) need extra space for merging
+    void** tmp = malloc(n * sizeof(void*));
+    void** left = array;
+    void** right = array + mid;
+    int i = 0;
+    int j = 0;
+    int left_size = mid;
+    int right_size = n - mid;
+    // (1) perform the merge
+    for (int k = 0; k < n; k++) {
+        if (j == right_size)
+            tmp[k] = left[i++];
+        else if (i == left_size)
+            tmp[k] = right[j++];
+        else if (cmp(left[i], right[j]) < 1)
+            tmp[k] = left[i++];
+        else
+            tmp[k] = right[j++];
+    }
+    // (2) copy the merged array
+    for (int i = 0; i < n; i++) {
+        array[i] = tmp[i];
+    }
+    // (3) clean up
+    free(tmp);
 }
 
 void merge_sort(void** array, int n, int cmp(const void*, const void*))
 {
-	if(n > 1) {
-		int mid = n / 2;
-		merge_sort(array,mid,cmp);
-		merge_sort(array+mid,n - mid,cmp);
-		merge(array,n,mid,cmp);
-	}
+    if (n > 1) {
+        int mid = n / 2;
+        merge_sort(array, mid, cmp);
+        merge_sort(array + mid, n - mid, cmp);
+        merge(array, n, mid, cmp);
+    }
 }
 
 /*
@@ -59,16 +65,18 @@ int partition(void** array, int n, int cmp(const void*, const void*))
     int i = 1;
     int j = n - 1;
     while (i <= j) {
-    	// move i to the right. make sure we don't go out of bounds!
-        while ( i < n && cmp(pivot, array[i]) > 0 ) { 
+        // move i to the right. make sure we don't go out of bounds!
+        while (i < n && cmp(pivot, array[i]) > 0) {
             i = i + 1;
         }
         while (cmp(pivot, array[j]) < 0) { // move j to the left
             j = j - 1;
         }
-        if(j < i) break;
+        if (j < i)
+            break;
         swap_ptr(array, i, j);
-        i++; j--;
+        i++;
+        j--;
     }
     swap_ptr(array, 0, j); // swap pivot in the right position
     return j;
@@ -78,9 +86,9 @@ int partition(void** array, int n, int cmp(const void*, const void*))
 void quick_sort(void** array, int n, int cmp(const void*, const void*))
 {
     if (n > 1) {
-        int pivot = partition(array,n, cmp);
-        quick_sort(array,pivot, cmp);
-        quick_sort(array+pivot+1, n - (pivot+1), cmp);
+        int pivot = partition(array, n, cmp);
+        quick_sort(array, pivot, cmp);
+        quick_sort(array + pivot + 1, n - (pivot + 1), cmp);
     }
 }
 
@@ -99,13 +107,12 @@ student_t* create_random_student()
     return new_student;
 }
 
-
 int student_id_cmp(const void* a, const void* b)
 {
     student_t* sa = (student_t*)a;
     student_t* sb = (student_t*)b;
     // with int data we can just subtract to get the right behaviour
-    return sa->id - sb->id; 
+    return sa->id - sb->id;
 }
 
 // qsort gets a pointer to the pointer elements
@@ -114,7 +121,7 @@ int qsort_student_id_cmp(const void* a, const void* b)
     student_t** sa = (student_t**)a;
     student_t** sb = (student_t**)b;
     // with int data we can just subtract to get the right behaviour
-    return (*sa)->id - (*sb)->id; 
+    return (*sa)->id - (*sb)->id;
 }
 
 void print_time_ms(const char* name, struct timeval start, struct timeval stop)
@@ -124,17 +131,16 @@ void print_time_ms(const char* name, struct timeval start, struct timeval stop)
     printf("%s elapsed time = %.2f ms\n", name, elapsed_ms);
 }
 
-
 void check_is_sorted(void** array, int n, int cmp(const void*, const void*))
 {
-	for(int i=1;i<n;i++) {
-		void* prev = array[i-1];
-		void* cur = array[i];
-		if( cmp(prev,cur) > 0 ) {
-			printf("SORTING ERROR %d!\n",i);
-			exit(EXIT_FAILURE);
-		}
-	}
+    for (int i = 1; i < n; i++) {
+        void* prev = array[i - 1];
+        void* cur = array[i];
+        if (cmp(prev, cur) > 0) {
+            printf("SORTING ERROR %d!\n", i);
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 int main(int argc, char const* argv[])
@@ -163,15 +169,16 @@ int main(int argc, char const* argv[])
         print_time_ms("\tmerge_sort", start, stop);
 
         gettimeofday(&start, NULL);
-        qsort(student_data, n,sizeof(student_t*),qsort_student_id_cmp);
+        qsort(student_data, n, sizeof(student_t*), qsort_student_id_cmp);
         gettimeofday(&stop, NULL);
         check_is_sorted((void**)student_data, n, student_id_cmp);
         print_time_ms("\tqsort", start, stop);
 
-        // cleanup 
+        // cleanup
         printf("cleanup!\n");
-        for (int i = 0; i < n; i++) free(student_data[i]);
-       	free(student_data);
+        for (int i = 0; i < n; i++)
+            free(student_data[i]);
+        free(student_data);
     }
     return 0;
 }
